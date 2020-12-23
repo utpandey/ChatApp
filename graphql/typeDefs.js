@@ -6,7 +6,8 @@ type User {
     email: String!
 }
 type Query {
-getUsers: [User]!
+    getUsers: [User]!
+    login(username: String! password:String!): User!
 }
 type Mutation {
     register(
