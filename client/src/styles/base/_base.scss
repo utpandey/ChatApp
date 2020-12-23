@@ -1,0 +1,60 @@
+// @font-face {
+//     font-family: 'Quicksand';
+//     src: url('/Quicksand-Light.woff2') format('woff2'), url('/Quicksand-Light.woff') format('woff');
+//     font-weight: 300;
+//     font-style: normal;
+// }
+
+/* reset & common styles */
+
+body,
+ul,
+h1,
+h2,
+h3,
+p,
+button,
+a,
+div {
+    margin: 0;
+    padding: 0;
+    //font-family: 'Quicksand';
+    //font-family: 'Walter Turncoat', cursive !important;
+    letter-spacing: 2px;
+    list-style-type: none;
+    text-decoration: none;
+}
+
+html {
+    // This defines what 1rem is
+    font-size: 62.5%; //1 rem = 10px; 10px/16px = 62.5%
+    @include respond(small-desktop) {
+        font-size: 59%; //1rem = 12, 12/16
+    }
+    @include respond(tab-land) {
+        // width < 1200?
+        font-size: 56.25%; //1 rem = 9px, 9/16 = 50%
+    }
+    @include respond(tab-port) {
+        // width < 900?
+        font-size: 50%; //1 rem = 8px, 8/16 = 50%
+    }
+    @include respond(phone) {
+        // width < 900?
+        font-size: 36%; //1 rem = 8px, 8/16 = 50%
+    }
+    @include respond(small-phone) {
+        // width < 900?
+        font-size: 36%; //1 rem = 8px, 8/16 = 50%
+    }
+    @include respond(big-desktop) {
+        font-size: 95%; //1rem = 12, 12/16
+    }
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient( 203deg, rgba(131, 58, 180, 0.9) 0%, rgba(253, 29, 29, 0.9) 50%, rgba(252, 176, 69, 0.9) 100%);
+    ;
+    overflow: visible;
+}
