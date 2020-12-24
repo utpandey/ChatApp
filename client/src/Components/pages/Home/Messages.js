@@ -1,22 +1,12 @@
 import React, { Fragment, useEffect } from 'react'
-import { gql, useLazyQuery } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
 import { Col } from 'react-bootstrap'
 
 import { useMessageDispatch, useMessageState } from '../../context/message'
 
 import Message from './Message'
 
-const GET_MESSAGES = gql`
-  query getMessages($from: String!) {
-    getMessages(from: $from) {
-      uuid
-      from
-      to
-      content
-      createdAt
-    }
-  }
-`
+import {GET_MESSAGES} from '../../Queries';
 
 export default function Messages() {
   const { users } = useMessageState()
