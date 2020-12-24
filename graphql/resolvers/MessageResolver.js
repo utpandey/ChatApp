@@ -1,7 +1,11 @@
-const { UserInputError, AuthenticationError, withFilter } = require('apollo-server')
-const { Message, User } = require('../../models');
+const {
+    UserInputError,
+    AuthenticationError,
+    withFilter,
+} = require('apollo-server')
 const { Op } = require('sequelize')
 
+const { Message, User } = require('../../models')
 
 module.exports = {
     Query: {
@@ -19,11 +23,9 @@ module.exports = {
                 const messages = await Message.findAll({
                     where: {
                         from: {
-                            [Op.in]: usernames
-                        },
+                            [Op.in]: usernames },
                         to: {
-                            [Op.in]: usernames
-                        },
+                            [Op.in]: usernames },
                     },
                     order: [
                         ['createdAt', 'DESC']
@@ -69,18 +71,24 @@ module.exports = {
             }
         },
     },
-
     Subscription: {
         newMessage: {
-            subscribe: withFilter((_, __, { pubsub, user }) => {
-                if (!user) throw new AuthenticationError('UnAuthenticated!')
-                return pubsub.asyncIterator(['NEW_MESSAGE'])
-            }, ({ newMessage }, _, { user }) => {
-                if (newMessage.from === user.username || newMessage.to === user.username) {
-                    return true;
+            subscribe: withFilter(
+                (_, __, { pubsub, user }) => {
+                    if (!user) throw new AuthenticationError('Unauthenticated')
+                    return pubsub.asyncIterator(['NEW_MESSAGE'])
+                },
+                ({ newMessage }, _, { user }) => {
+                    if (
+                        newMessage.from === user.username ||
+                        newMessage.to === user.username
+                    ) {
+                        return true
+                    }
+
+                    return false
                 }
-                return false;
-            }),
-        }
-    }
+            ),
+        },
+    },
 }

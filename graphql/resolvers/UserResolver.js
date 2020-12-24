@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
 
 const { Message, User } = require('../../models')
-const { JWT_SECRET } = require('../../config/env.json')
 
 module.exports = {
     Query: {
@@ -14,8 +13,11 @@ module.exports = {
 
                 let users = await User.findAll({
                     attributes: ['username', 'imageUrl', 'createdAt'],
-                    where: { username: {
-                            [Op.ne]: user.username } },
+                    where: {
+                        username: {
+                            [Op.ne]: user.username
+                        }
+                    },
                 })
 
                 const allUserMessages = await Message.findAll({
@@ -70,13 +72,12 @@ module.exports = {
                     throw new UserInputError('password is incorrect', { errors })
                 }
 
-                const token = jwt.sign({ username }, JWT_SECRET, {
+                const token = jwt.sign({ username }, process.env.JWT_SECRET, {
                     expiresIn: 60 * 60,
                 })
 
                 return {
                     ...user.toJSON(),
-                    createdAt: user.createdAt.toISOString(),
                     token,
                 }
             } catch (err) {

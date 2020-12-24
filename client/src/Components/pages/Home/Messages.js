@@ -9,26 +9,19 @@ import Message from './Message'
 import {GET_MESSAGES,SEND_MESSAGES} from '../../Queries';
 
 export default function Messages() {
-
-  const [content, setContent] = useState('')
-
   const { users } = useMessageState()
   const dispatch = useMessageDispatch()
+  const [content, setContent] = useState('')
 
   const selectedUser = users?.find((u) => u.selected === true)
   const messages = selectedUser?.messages
-
   const [
     getMessages,
     { loading: messagesLoading, data: messagesData },
   ] = useLazyQuery(GET_MESSAGES)
 
-  const [sendMessage] = useMutation(SEND_MESSAGES,{
-    onCompleted: data => dispatch({ type: 'ADD_MESSAGE', payload: {
-      username: selectedUser.username,
-      message: data.sendMessage
-    }}),
-    onError: err => console.log(err)
+  const [sendMessage] = useMutation(SEND_MESSAGES, {
+    onError: (err) => console.log(err),
   })
 
   useEffect(() => {
@@ -49,22 +42,22 @@ export default function Messages() {
     }
   }, [messagesData])
 
-  const submitMessageHandler =(e) => {
+  const submitMessage = (e) => {
     e.preventDefault()
 
-    if(content.trim() === '' || !selectedUser ) return
+    if (content.trim() === '' || !selectedUser) return
 
+    setContent('')
 
-    setContent('');
-    // mutation for message 
-    sendMessage({variables: {to: selectedUser.username, content}})
+    // mutation for sending the message
+    sendMessage({ variables: { to: selectedUser.username, content } })
   }
 
   let selectedChatMarkup
   if (!messages && !messagesLoading) {
-    selectedChatMarkup = <p className="info-text" >Select a friend</p>
+    selectedChatMarkup = <p className="info-text">Select a friend</p>
   } else if (messagesLoading) {
-    selectedChatMarkup = <p className="info-text" >Loading..</p>
+    selectedChatMarkup = <p className="info-text">Loading..</p>
   } else if (messages.length > 0) {
     selectedChatMarkup = messages.map((message, index) => (
       <Fragment key={message.uuid}>
@@ -77,31 +70,36 @@ export default function Messages() {
       </Fragment>
     ))
   } else if (messages.length === 0) {
-    selectedChatMarkup = <p>You are now connected! send your first message!</p>
+    selectedChatMarkup = (
+      <p className="info-text">
+        You are now connected! send your first message!
+      </p>
+    )
   }
 
   return (
-    <Col xs={10} md={8}>
-    <div className="messages-box d-flex flex-column-reverse">
-      {selectedChatMarkup}
-    </div>
-     <div className="">
-     <Form onSubmit={submitMessageHandler}>
-        <Form.Group className="d-flex align-items-center">
-          <Form.Control
-            type="text"
-            className="p-4 mt-4 message-input rounded-pill bg-secondary border-0"
-            placeholder="Type a message.."
-            value={content}
-            onChange={e => setContent(e.target.value)}
-          />
-          <i className="fas fa-paper-plane fa-2x text-primary mt-4 ml-3"
-            onClick={submitMessageHandler}
-            role='button'
-          />
-        </Form.Group>
-      </Form>
-     </div>
+    <Col xs={10} md={8} className="p-0">
+      <div className="messages-box d-flex flex-column-reverse p-3">
+        {selectedChatMarkup}
+      </div>
+      <div className="px-3 py-2">
+        <Form onSubmit={submitMessage}>
+          <Form.Group className="d-flex align-items-center m-0">
+            <Form.Control
+              type="text"
+              className="message-input rounded-pill p-4 bg-secondary border-0"
+              placeholder="Type a message.."
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+            />
+            <i
+              className="fas fa-paper-plane fa-2x text-primary ml-2"
+              onClick={submitMessage}
+              role="button"
+            ></i>
+          </Form.Group>
+        </Form>
+      </div>
     </Col>
   )
 }
