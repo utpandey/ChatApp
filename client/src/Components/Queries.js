@@ -68,3 +68,11 @@ mutation reactToMessage($uuid: String!, $content: String!) {
   }
 }
 `
+
+export const SEND_MESSAGES = gql `
+  mutation sendMessage($to: String!, $content: String!){
+    sendMessage(to: $to, content: $content){
+      uuid from to content createdAt
+    }
+  }
+`

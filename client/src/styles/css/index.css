@@ -68,7 +68,7 @@ body {
   overflow-y: scroll;
   scrollbar-width: none; }
 
-.messages-box ::-webkit-scrollbar {
+.messages-box::-webkit-scrollbar {
   display: none; }
 
 .user-image {
@@ -76,6 +76,14 @@ body {
   height: 50px;
   object-fit: cover;
   border-radius: 50%; }
+
+.message-input::placeholder {
+  color: rgba(0, 0, 0, 0.5); }
+
+.info-text {
+  color: rgba(0, 0, 0, 0.5);
+  text-align: center;
+  margin-bottom: 1rem; }
 
 /*!
  * Bootstrap v4.5.3 (https://getbootstrap.com/)
