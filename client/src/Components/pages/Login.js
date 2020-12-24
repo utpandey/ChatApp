@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { Row, Col, Form, Button } from 'react-bootstrap'
-import {  useLazyQuery } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
 import { Link } from 'react-router-dom'
 
 import {LOGIN_USER} from '../Queries';
+import { useAuthDispatch } from '../context/auth';
 
 export default function Register(props) {
   const [variables, setVariables] = useState({
@@ -12,10 +13,14 @@ export default function Register(props) {
   })
   const [errors, setErrors] = useState({})
 
+  const dispatch = useAuthDispatch()
+
   const [loginUser, { loading }] = useLazyQuery(LOGIN_USER, {
-    onError: (err) => setErrors(err.graphQLErrors[0].extensions.errors),
+    onError: (err) => {setErrors(err.graphQLErrors[0].extensions.errors)
+        console.log(err)},
     onCompleted(data) {
-      localStorage.setItem('token', data.login.token)
+        console.log(data);
+      dispatch({type: 'LOGIN',payload: data.login})
       props.history.push('/')
     },
   })
